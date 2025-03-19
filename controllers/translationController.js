@@ -7,26 +7,26 @@ const { extractTextFromCSV, extractTextFromPDF, extractTextFromXML } = require("
 
 exports.translateFile = async (req, res) => {
   try {
-    const { targetLanguage } = req.body;
+    const { sourceLanguage, targetLanguage } = req.body;
     const file = req.file;
 
     if (!file) return res.status(400).json({ error: "No file uploaded" });
 
     let words = [];
     const filePath = path.join(__dirname, "../uploads", file.filename);
-    
-    if (file.mimetype.includes("csv")) {
+    console.log('file mimetype', file.mimetype)
+    if (file.mimetype=="text/csv") {
       words = await extractTextFromCSV(filePath);
-    } else if (file.mimetype.includes("pdf")) {
+    } else if (file.mimetype=="application/pdf") {
       words = await extractTextFromPDF(filePath);
-    } else if (file.mimetype.includes("xml")) {
+    } else if (file.mimetype=="text/xml") {
       words = await extractTextFromXML(filePath);
     } else {
       return res.status(400).json({ error: "Unsupported file format" });
     }
 
     let finalText = [];
-    console.log('translation process started')
+    console.log('translation process started', words)
     for (const word of words) {
         console.log(word)
       let translatedWord = await redisClient.get(`${word}:${targetLanguage}`);
@@ -39,7 +39,7 @@ exports.translateFile = async (req, res) => {
         } else {
           translatedWord = await translateTextUsingGemini(word, targetLanguage);
           await redisClient.set(`${word}:${targetLanguage}`, translatedWord, "EX", 86400);
-          await Translation.create({ originalText: word, translatedText: translatedWord, sourceLanguage: "auto", targetLanguage });
+          await Translation.create({ originalText: word, translatedText: translatedWord, sourceLanguage, targetLanguage });
         }
       }
 
