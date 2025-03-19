@@ -1,8 +1,8 @@
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+const axios = require("axios");  
 
-// Initialize Gemini 2.0 model using the API Key
-const genAI = new GoogleGenerativeAI(process.env.API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-2.0" });
+// Hardcoded URL for the Gemini 2.0 Flash model  
+const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.API_KEY}`;  
+
 
 // Translate text using Gemini 2.0
 const translateTextUsingGemini = async (text, targetLanguage) => {
@@ -13,6 +13,7 @@ const translateTextUsingGemini = async (text, targetLanguage) => {
       Avoid localized jargon and maintain cultural references such as “Olympics” or “Christmas” in their original form. 
       Use consistent translations for widely accepted phrases (e.g., “Thank you”) and develop a glossary for key terms. 
       Ensure clarity and user-friendliness, preserving formatting and context for accurate interpretation while keeping the language simple and accessible.
+      Note: Give me only the traslated text. I don't want you give me another other words.
     `;
     
     // Construct the prompt with the provided text and style guide
@@ -21,11 +22,23 @@ const translateTextUsingGemini = async (text, targetLanguage) => {
       The text to translate: "${text}"`;
 
     // Request translation from the Gemini 2.0 model
-    const response = await model.generateText({
-      inputText: prompt,
-    });
+    const requestBody = {  
+      contents: [  
+        {  
+          parts: [{ text: prompt }]  
+        }  
+      ]  
+    };  
 
-    return response.text.trim();
+    const response = await axios.post(GEMINI_URL, requestBody, {  
+      headers: {  
+        "Content-Type": "application/json"  
+      }  
+    });  
+
+    console.log('Response:', response.data.candidates[0].content.parts[0].text);
+    return response.data.candidates[0].content.parts[0].text;  
+
   } catch (error) {
     console.error("Error in Gemini 2.0 Translation:", error);
     throw new Error("Translation failed using Gemini 2.0");

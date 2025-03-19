@@ -17,6 +17,7 @@ const extractTextFromCSV = (filePath) => {
         });
       })
       .on("end", () => {
+        console.log('words that are read', words)
         resolve(words);
       })
       .on("error", (err) => {

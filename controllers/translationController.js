@@ -32,13 +32,14 @@ exports.translateFile = async (req, res) => {
       let translatedWord = await redisClient.get(`${word}:${targetLanguage}`);
 
       if (!translatedWord) {
-        const existingTranslation = await Translation.findOne({ originalText: word, targetLanguage });
+        const existingTranslation = await Translation.findOne({ originalText: word, sourceLanguage, targetLanguage });
 
         if (existingTranslation) {
           translatedWord = existingTranslation.translatedText;
         } else {
-          translatedWord = await translateTextUsingGemini(word, targetLanguage);
-          await redisClient.set(`${word}:${targetLanguage}`, translatedWord, "EX", 86400);
+            translatedWord = await translateTextUsingGemini(word, targetLanguage);
+            console.log('translated word', translatedWord)
+            await redisClient.set(`${word}:${targetLanguage}`, translatedWord, "EX", 86400);
           await Translation.create({ originalText: word, translatedText: translatedWord, sourceLanguage, targetLanguage });
         }
       }
