@@ -6,18 +6,23 @@ const xml2js = require("xml2js");
 
 // Function to extract text from CSV file
 const extractTextFromCSV = (filePath) => {
+  console.log("Starting CSV extraction for file:", filePath);
   return new Promise((resolve, reject) => {
     const words = [];
     fs.createReadStream(filePath)
       .pipe(csvParser())
       .on("data", (row) => {
-        // Assuming each row contains text to be translated (change according to your CSV structure)
         Object.values(row).forEach((value) => {
           words.push(value);
         });
       })
-      .on("end", () => resolve(words))
-      .on("error", reject);
+      .on("end", () => {
+        resolve(words);
+      })
+      .on("error", (err) => {
+        console.error("Error during CSV extraction:", err);
+        reject(err);
+      });
   });
 };
 
