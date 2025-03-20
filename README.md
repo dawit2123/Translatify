@@ -9,6 +9,14 @@ Translatify is a lightweight, easy-to-use JavaScript-based language selection to
 - ✅ **Scalable & Extendable** – Easily adaptable for additional languages or i18n frameworks.
 
 ## Demos
+#### Home
+![Home](https://github.com/dawit2123/Translatify/blob/main/Demos/home.png)
+
+#### Translation Processing
+![Translation Processing](https://github.com/dawit2123/Translatify/blob/main/Demos/translation_process.png)
+
+#### Multi file download option
+![Multi file download option](https://github.com/dawit2123/Translatify/blob/main/Demos/download.png)
 
 ## Usage 🚀
 Simply import the `languages` array and use it in your project.
