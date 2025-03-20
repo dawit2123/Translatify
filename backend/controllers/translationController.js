@@ -29,9 +29,7 @@ exports.translateFile = async (req, res) => {
     }
 
     let finalText = [];
-    console.log('translation process started', words)
     for (const word of words) {
-        console.log(word)
       let translatedWord = await redisClient.get(`${word}:${targetLanguage}`);
 
       if (!translatedWord) {
