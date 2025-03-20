@@ -25,9 +25,6 @@ Simply import the `languages` array and use it in your project.
 
 3. Go to the backend and execute the command `npm install` to install the package and then execute `node server.js`
 4. Go to the frontend and execute the command `npm install` to install the package and then execute `npm run start`
-## License 📜
-This project is open-source and available under the **MIT License**.
 
----
 🚀 **Translatify – Making Globalization Easy!** 🌍
 
