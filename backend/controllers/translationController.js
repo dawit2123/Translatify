@@ -9,6 +9,9 @@ exports.translateFile = async (req, res) => {
   try {
     const { sourceLanguage, targetLanguage } = req.body;
     const file = req.file;
+    console.log('source language', sourceLanguage)
+    console.log('target language', targetLanguage)
+    console.log('file', file)
 
     if (!file) return res.status(400).json({ error: "No file uploaded" });
 
