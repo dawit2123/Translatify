@@ -34,7 +34,7 @@ const extractTextFromPDF = (filePath) => {
     pdfParse(buffer)
       .then((data) => {
         // Extract text from PDF and split by whitespace or punctuation
-        const words = data.text.split(/\s+/);
+        const words = data.text.split(/\s+/).filter(word => word !== "");
         resolve(words);
       })
       .catch(reject);

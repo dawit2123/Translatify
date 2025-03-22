@@ -48,7 +48,9 @@ exports.translateFile = async (req, res) => {
       finalText.push(translatedWord);
     }
 
-    const translatedText = finalText.join(" ");
+    const translatedText = finalText.map(word => word.trim()).join(" ");
+    console.log('translated text')
+    console.log(translatedText)
     const outputFilePath = path.join(__dirname, `../downloads/translated-${file.filename}`);
 
     fs.writeFileSync(outputFilePath, translatedText);
